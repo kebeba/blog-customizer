@@ -5,7 +5,16 @@ import { Select } from 'src/ui/select'
 import { Separator } from 'src/ui/separator'
 import { Text } from 'src/ui/text'
 import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose'
-import { ArticleStateType, OptionType, fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, contentWidthArr } from 'src/constants/articleProps'
+import {
+	ArticleStateType,
+	OptionType,
+	fontFamilyOptions,
+	fontSizeOptions,
+	fontColors,
+	backgroundColors,
+	contentWidthArr,
+	defaultArticleState,
+} from 'src/constants/articleProps'
 
 import styles from './ArticleParamsForm.module.scss';
 import { useState, useRef } from 'react';
@@ -42,13 +51,21 @@ export const ArticleParamsForm = ({currentArticleState, setArticleState} : Artic
 	const handleSettingsApply = (e: React.FormEvent) => {
 		e.preventDefault();
 		setArticleState(sidebarArticleState);
+		setSidebarIsActive(false);
+	}
+
+	const handleSettingsReset = (e: React.FormEvent) => {
+		e.preventDefault();
+		setArticleState(defaultArticleState);
+		setSidebarArticleState(defaultArticleState);
+		setSidebarIsActive(false);
 	}
 
 	return (
 		<>
 			<ArrowButton isOpen={sidebarIsActive} onClick={handleSidebarActivation} />
 			<aside ref={rootElementReference} className={clsx(styles.container, sidebarIsActive && styles.container_open)}>
-				<form className={styles.form} onSubmit={handleSettingsApply}>
+				<form className={styles.form} onSubmit={handleSettingsApply} onReset={handleSettingsReset}>
 					<Text size={31} family='open-sans' weight={800} uppercase>Задайте параметры</Text>
 					<Select
 						onChange={(option) => handleChange('fontFamilyOption', option)}
